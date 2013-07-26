@@ -64,8 +64,23 @@ let flatten (ss: 'a list list) : ('a list) =
         | x::xs,acc -> innerFlatten xs (List.append acc x)
     innerFlatten ss []
 
-/// 7. Flatten a nested list structure. (Second attempt)
-type NestedList<'a> =
-    | Elem of 'a
-    | NestedList of 'a list
-let nl = NestedList [Elem 1; NestedList [Elem 2]; Elem 3; NestedList [Elem 4;Elem 5; Elem 6]]
+/// 8. Eliminate consecutive duplicates of list elements.
+let removeConsecutiveDuplicates (ss: 'a list) : ('a list) =
+    let rec removeDuplicates (ss: 'a list) (acc: 'a list) : ('a list) =
+        match ss with
+        | x::y::xs when x = y ->
+            printfn "Eq %A %A" (y::xs) acc
+            removeDuplicates (y::xs) acc
+        | x::y::xs when not(x = y) ->
+            printfn "Neq %A %A" (y::xs) (x::acc)
+            removeDuplicates (y::xs) (x::acc)
+        | [x] ->
+            printfn"Lst %A" (x::acc)
+            List.rev (x::acc)
+        | [] -> acc
+        | _ -> failwith "Impossible?"
+    match ss with
+    | [] -> []
+    | [a] -> [a]
+    | xs -> removeDuplicates xs []
+
