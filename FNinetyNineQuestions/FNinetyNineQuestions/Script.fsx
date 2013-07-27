@@ -69,13 +69,10 @@ let removeConsecutiveDuplicates (ss: 'a list) : ('a list) =
     let rec removeDuplicates (ss: 'a list) (acc: 'a list) : ('a list) =
         match ss with
         | x::y::xs when x = y ->
-            printfn "Eq %A %A" (y::xs) acc
             removeDuplicates (y::xs) acc
         | x::y::xs when not(x = y) ->
-            printfn "Neq %A %A" (y::xs) (x::acc)
             removeDuplicates (y::xs) (x::acc)
         | [x] ->
-            printfn"Lst %A" (x::acc)
             List.rev (x::acc)
         | [] -> acc
         | _ -> failwith "Impossible?"
@@ -84,3 +81,22 @@ let removeConsecutiveDuplicates (ss: 'a list) : ('a list) =
     | [a] -> [a]
     | xs -> removeDuplicates xs []
 
+/// 9. Pack consecutive duplicates of list elements into sublists. If a list contains repeated elements they should be placed in separate sublists.
+let pack (ss: 'a list) : ('a list list) =
+    let rec innerPack (ss: 'a list) (cs: 'a list) (acc: 'a list list) : ('a list list) =
+        match ss with
+        | x::y::xs when x = y ->
+            innerPack (y::xs) (x::cs) acc
+        | x::y::xs when not(x = y) ->
+            innerPack (y::xs) [] ((x::cs)::acc)
+        | [x] ->
+            List.rev ([x]::cs::acc)
+        | [] -> acc
+        | _ -> failwith "Impossible?"
+    match ss with
+    | [] -> []
+    | [a] -> [[a]]
+    | [x;y] when x = y -> [[x;y]]
+    | [x;y] when not (x = y) -> [[x];[y]]
+    | (x::xs) -> innerPack (x::xs) [] []
+    
