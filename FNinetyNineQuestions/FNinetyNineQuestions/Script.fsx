@@ -94,3 +94,6 @@ let pack (ss: 'a list) : ('a list list) =
     | [] -> []
     | (x::xs) -> innerPack xs [x] []
     
+/// 10. Run-length encoding of a list. Consecutive duplicates of elements are encoded as lists (N E) where N is the number of duplicates of the element E.
+let rle (ss: 'a list) : ((int * 'a) list) =
+    pack ss |> List.map (fun (x::xs) -> (List.length (x::xs), x))
