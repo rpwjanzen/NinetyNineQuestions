@@ -97,3 +97,16 @@ let pack (ss: 'a list) : ('a list list) =
 /// 10. Run-length encoding of a list. Consecutive duplicates of elements are encoded as lists (N E) where N is the number of duplicates of the element E.
 let rle (ss: 'a list) : ((int * 'a) list) =
     pack ss |> List.map (fun (x::xs) -> (List.length (x::xs), x))
+
+// 11. Modify the result of problem 10 in such a way that if an element has no duplicates it is simply copied into the result list. Only elements with duplicates are transferred as (N E) lists.
+type RleElement<'a> =
+    | Single of 'a
+    | Multiple of int * 'a
+
+let rle2 (ss: 'a list) : (RleElement<'a> list) =
+    let t = (fun (l, a) -> if (l = 1) then (Single a) else (Multiple (l, a)))
+    (rle ss) |> List.map t
+
+/// 12. Decode a run-length encoded list.
+let decode (rs:RleElement<'a> list) : ('a list) =
+    rs |> List.collect (fun r -> match r with Single v -> [v] | Multiple (l,a) -> List.init l (fun _ -> a))
