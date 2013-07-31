@@ -137,3 +137,10 @@ let replicate (ss: 'a list) (n:int) =
         if count = 0 then acc else innerReplicate a (count - 1) (a::acc)
     ss |> List.collect (fun x -> innerReplicate x n [])
 
+/// 16. Drop every N'th element from a list.
+let dropNth (ss: 'a list) (n:int) =
+    let rec innerDropNth (ss: 'a list) (n:int) (count:int) (acc: 'a list) =
+        match ss with
+        | [] -> List.rev acc
+        | (x::xs) -> if n = count then innerDropNth xs n 1 acc else innerDropNth xs n (count + 1) (x::acc)
+    innerDropNth ss n 1 []
