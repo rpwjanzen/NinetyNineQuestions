@@ -126,3 +126,14 @@ let rle3 (ss: 'a list) : (RleElement<'a> list) =
     match ss with
     | [] -> []
     | (x::xs) -> innerPack xs x 1 []
+
+/// 14. Duplicate the elements of a list. e.g. [1;2;3] -> [1;1;2;2;3;3]
+let duplicate (ss: 'a list) =
+    ss |> List.collect (fun x -> [x;x])
+
+/// 15. Replicate the elements of a list a given number of times.
+let replicate (ss: 'a list) (n:int) =
+    let rec innerReplicate (a:'a) (count:int) (acc:'a list) : ('a list) =
+        if count = 0 then acc else innerReplicate a (count - 1) (a::acc)
+    ss |> List.collect (fun x -> innerReplicate x n [])
+
