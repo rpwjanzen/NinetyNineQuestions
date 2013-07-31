@@ -110,3 +110,19 @@ let rle2 (ss: 'a list) : (RleElement<'a> list) =
 /// 12. Decode a run-length encoded list.
 let decode (rs:RleElement<'a> list) : ('a list) =
     rs |> List.collect (fun r -> match r with Single v -> [v] | Multiple (l,a) -> List.init l (fun _ -> a))
+
+/// 13. Run-length encoding of a list (direct solution). 
+/// Implement the so-called run-length encoding data compression method directly. I.e. don't explicitly create the sublists containing the duplicates,
+/// as in problem 9, but only count them.
+/// As in problem P11, simplify the result list by replacing the singleton lists (1 X) by X.
+let rle3 (ss: 'a list) : (RleElement<'a> list) =
+    let isDuplicate (a:'a) (b:'a) = a = b
+    let rec innerPack (ss: 'a list) (a:'a) (count:int) (acc: RleElement<'a> list) : (RleElement<'a> list) =
+        match ss with
+        | x::xs when isDuplicate x a -> innerPack (xs) a (count + 1) acc
+        | x::xs when not(isDuplicate x a) -> innerPack (xs) x 1 ((if count = 1 then (Single a) else (Multiple (count, a))) ::acc)
+        | [] -> List.rev ((Multiple (count,a))::acc)
+        | _ -> failwith "Impossible?"
+    match ss with
+    | [] -> []
+    | (x::xs) -> innerPack xs x 1 []
