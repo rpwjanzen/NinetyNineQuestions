@@ -144,3 +144,11 @@ let dropNth (ss: 'a list) (n:int) =
         | [] -> List.rev acc
         | (x::xs) -> if n = count then innerDropNth xs n 1 acc else innerDropNth xs n (count + 1) (x::acc)
     innerDropNth ss n 1 []
+
+/// 17. Split a list into two parts; the length of the first part is given.
+let split (ss: 'a list) (at:int) =
+    let rec innerSplit (ss: 'a list) (c:int) (acc: 'a list) : ('a list * 'a list) =
+        match ss with
+        | (x::xs) -> if c = at then (acc |> List.rev, (x::xs)) else innerSplit xs (c + 1) (x::acc)
+        | [] -> if c <= at then (acc |> List.rev, []) else ([], acc |> List.rev)
+    innerSplit ss 0 []
