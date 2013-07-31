@@ -83,20 +83,14 @@ let removeConsecutiveDuplicates (ss: 'a list) : ('a list) =
 
 /// 9. Pack consecutive duplicates of list elements into sublists. If a list contains repeated elements they should be placed in separate sublists.
 let pack (ss: 'a list) : ('a list list) =
+    let isDuplicate (a:'a) (b:'a) = a = b
     let rec innerPack (ss: 'a list) (cs: 'a list) (acc: 'a list list) : ('a list list) =
-        match ss with
-        | x::y::xs when x = y ->
-            innerPack (y::xs) (x::cs) acc
-        | x::y::xs when not(x = y) ->
-            innerPack (y::xs) [] ((x::cs)::acc)
-        | [x] ->
-            List.rev ([x]::cs::acc)
-        | [] -> acc
-        | _ -> failwith "Impossible?"
+        match ss,cs with
+        | x::xs,y::_ when isDuplicate x y -> innerPack (xs) (x::cs) acc
+        | x::xs,y::_ when not(isDuplicate x y) -> innerPack (xs) [x] (cs::acc)
+        | [],cs -> List.rev (cs::acc)
+        | _,_ -> failwith "Impossible?"
     match ss with
     | [] -> []
-    | [a] -> [[a]]
-    | [x;y] when x = y -> [[x;y]]
-    | [x;y] when not (x = y) -> [[x];[y]]
-    | (x::xs) -> innerPack (x::xs) [] []
+    | (x::xs) -> innerPack xs [x] []
     
