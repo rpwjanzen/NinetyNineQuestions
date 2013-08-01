@@ -152,3 +152,21 @@ let split (ss: 'a list) (at:int) =
         | (x::xs) -> if c = at then (acc |> List.rev, (x::xs)) else innerSplit xs (c + 1) (x::acc)
         | [] -> if c <= at then (acc |> List.rev, []) else ([], acc |> List.rev)
     innerSplit ss 0 []
+
+/// 18. Extract a slice from a list. 
+/// Given two indices, i and k, the slice is the list containing the elements between the i'th and k'th element of the original list
+/// (both limits included). Start counting the elements with 1.
+let slice (ss: 'a list) (s:int) (e:int) : ('a list) =
+    ss |> List.toSeq |> Seq.skip (s - 1) |> Seq.take (e - s) |> Seq.toList
+        
+/// 19. Rotate a list N places to the left.
+let rotate (ss: 'a list) (n:int) : ('a list) =
+    let p0 = ss |> List.toSeq |> Seq.skip n |> Seq.toList
+    let p1 = ss |> List.toSeq |> Seq.take n |> Seq.toList
+    List.concat [p0; p1]
+
+    /// 20. Remove the K'th element from a list.
+let removeAt (ss: 'a list) (n:int) : ('a list) =
+    let p0 = ss |> List.toSeq |> Seq.skip (n + 1) |> Seq.toList
+    let p1 = ss |> List.toSeq |> Seq.take n |> Seq.toList
+    List.concat [p1; p0]
