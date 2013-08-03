@@ -165,8 +165,12 @@ let rotate (ss: 'a list) (n:int) : ('a list) =
     let p1 = ss |> List.toSeq |> Seq.take n |> Seq.toList
     List.concat [p0; p1]
 
-    /// 20. Remove the K'th element from a list.
+/// 20. Remove the K'th element from a list.
 let removeAt (ss: 'a list) (n:int) : ('a list) =
     let p0 = ss |> List.toSeq |> Seq.skip (n + 1) |> Seq.toList
     let p1 = ss |> List.toSeq |> Seq.take n |> Seq.toList
     List.concat [p1; p0]
+
+/// 21. Insert an element at a given position into a list.
+let insertAt (ss: 'a list) (n:int) : ('a list) =
+    
